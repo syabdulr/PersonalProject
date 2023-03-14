@@ -10,7 +10,7 @@ public class cameraAngles : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        transform.Rotate("")
+        //transform.Rotate("");
     }
 
     // Update is called once per frame
