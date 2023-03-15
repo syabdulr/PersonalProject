@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CarMovement : MonoBehaviour
 {
+    [SerializeField]
+    WheelCollider frontRight, frontLeft, backRight, backLeft;
+
     public float acceleration = 500f;
     public float breakingForce = 200f;
     public float maxTurnAngle = 15f;
@@ -23,12 +26,19 @@ public class CarMovement : MonoBehaviour
         {
             currentBreakForce = 0f;
         }
-        transform.position = transform.position +
-            new Vector3(currentAcceleration * Time.deltaTime, 1 * Time.deltaTime);
+        //applying acceleration to front wheels
+        frontRight.motorTorque = currentAcceleration;
+        frontLeft.motorTorque = currentAcceleration;
 
+        //applying break force to all wheels
+        frontRight.brakeTorque = currentBreakForce;
+        frontLeft.brakeTorque = currentBreakForce;
+        backLeft.motorTorque = currentBreakForce;
+        backRight.motorTorque = currentBreakForce;
+
+        //steering
         currentTurnAngle = maxTurnAngle * Input.GetAxis("Horizontal");
-        //need to use same wheel component like in tutorial.. 9:54
-        //cannot apply basic movement with this solution;
-        //transform.localRotation = currentTurnAngle;
+        frontLeft.steerAngle = currentTurnAngle;
+        frontRight.steerAngle = currentTurnAngle;
     }
 }
