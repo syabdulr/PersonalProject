@@ -6,7 +6,8 @@ public class CarMovement : MonoBehaviour
 {
     [SerializeField]
     WheelCollider frontRight, frontLeft, backRight, backLeft;
-
+    [SerializeField]
+    Transform frontRightTransform, frontLeftTransform, backRightTransform, backLeftTransform;
     public float acceleration = 500f;
     public float breakingForce = 200f;
     public float maxTurnAngle = 15f;
@@ -15,6 +16,11 @@ public class CarMovement : MonoBehaviour
     float currentBreakForce = 0f;
     float currentTurnAngle = 0f;
 
+    private void Awake()
+    {
+        var com = gameObject.GetComponent<Rigidbody>();
+        com.centerOfMass += new Vector3(0, -1f, 0);
+    }
     private void FixedUpdate()
     {
         currentAcceleration = acceleration * Input.GetAxis("Vertical");
@@ -40,5 +46,21 @@ public class CarMovement : MonoBehaviour
         currentTurnAngle = maxTurnAngle * Input.GetAxis("Horizontal");
         frontLeft.steerAngle = currentTurnAngle;
         frontRight.steerAngle = currentTurnAngle;
+
+        RotateWheel(frontLeft, frontLeftTransform);
+        RotateWheel(frontRight, frontRightTransform);
+
+        RotateWheel(backLeft, backLeftTransform);
+        RotateWheel(backRight, backRightTransform);
+
+    }
+    void RotateWheel(WheelCollider col, Transform trans)
+    {
+        Vector3 position;
+        Quaternion rotation;
+
+        col.GetWorldPose(out position, out rotation);
+        trans.position = position;
+        trans.rotation = rotation;
     }
 }
